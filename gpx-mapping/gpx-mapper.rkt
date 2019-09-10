@@ -8,8 +8,8 @@
 
 (define track (read-gpx-trackpoints (open-input-file "explore.gpx")))
 (define toplevel (new frame% [label "Map Demo"] [width 1000] [height 1000]))
-(define map (new map-widget% [parent toplevel]))
+(define map (new map-widget% [parent toplevel] [zoom 6]))
 
 (send toplevel show #t)
 (send map add-track track #f)
-(send map resize-to-fit)
+(send map center-map)
