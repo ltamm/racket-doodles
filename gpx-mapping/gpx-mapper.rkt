@@ -7,7 +7,7 @@
 ; gpx file not included! 
 
 (define track (read-gpx-trackpoints (open-input-file "explore.gpx")))
-(define toplevel (new frame% [label "Map Demo"] [width 1000] [height 1000]))
+(define toplevel (new frame% [label "Cycling Route"] [width 1000] [height 1000]))
 (define map (new map-widget% [parent toplevel] [zoom 6]))
 
 (send toplevel show #t)
