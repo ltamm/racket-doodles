@@ -9,6 +9,7 @@
 
 (define BACKDROP (rectangle WIDTH HEIGHT "solid" "goldenrod"))
 (define CACTUS-IMG (bitmap/file (string->path "cactus.png")))
+(define DIRT-IMG (bitmap/file (string->path "dirt.png")))
 
 ; Set up cactus 
 (struct cactus (x-pos y-pos))
@@ -33,4 +34,4 @@
   (big-bang w
     (to-draw render)))
 
-(main init-world)
+;(main init-world)
