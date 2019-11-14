@@ -64,13 +64,12 @@
 
 ; Set up world
 ; map is currently a list of dirt tiles
-(struct world (cactus map))
-(define init-world (world init-cactus DIRT-TILES))
-
+(struct world (cactus))
+(define init-world (world init-cactus))
 
 (define (render world)
   (let ([cactus (world-cactus world)])
-  (place-cactus cactus background)))
+    (place-cactus cactus background)))
 
 
 ; Run the world!
