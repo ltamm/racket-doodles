@@ -43,19 +43,17 @@
 
 ; Draw functions
 ; image, image, tile-coord -> image
-(define place-image-center-tile (foreground background tile-coord)
-  (let* ([half-tile (/ TILE-SIDE-IN-PIXELS 2)]]
-         [x (+ half-tile (pixel-coord-x-pos tile-coord))][x (+ half-tile (pixel-coord-x-pos tile-coord))]
+(define (place-image-center-tile foreground background tile-coord)
+  (let* ([half-tile (/ TILE-SIDE-IN-PIXELS 2)]
+         [pixel-coord (tile-coord->pixel-coord tile-coord)]
+         [x (+ half-tile (pixel-coord-x-pos pixel-coord))]
+         [y (+ half-tile (pixel-coord-x-pos pixel-coord))])
+    (place-image foreground x y background)))
 
 
 (define (render world)
-  (let* ([cactus (world-cactus world)]
-         [cactus-coord (tile-coord->pixel-coord (cactus-tile-coord cactus))]
-         [cactus-x (+ 64 (pixel-coord-x-pos cactus-coord))]
-         [cactus-y (+ 64 (pixel-coord-y-pos cactus-coord))])
-  (place-image CACTUS-IMG
-               cactus-x cactus-y
-               BACKDROP)))
+  (let ([cactus (world-cactus world)])
+  (place-image-center-tile CACTUS-IMG BACKDROP (cactus-tile-coord cactus))))
 
 
 ; Run the world!
