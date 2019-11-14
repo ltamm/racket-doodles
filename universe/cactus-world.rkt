@@ -47,7 +47,7 @@
   (let* ([half-tile (/ TILE-SIDE-IN-PIXELS 2)]
          [pixel-coord (tile-coord->pixel-coord tile-coord)]
          [x (+ half-tile (pixel-coord-x-pos pixel-coord))]
-         [y (+ half-tile (pixel-coord-x-pos pixel-coord))])
+         [y (+ half-tile (pixel-coord-y-pos pixel-coord))])
     (place-image foreground x y background)))
 
 
