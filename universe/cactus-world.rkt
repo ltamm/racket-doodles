@@ -48,7 +48,10 @@
              "solid" "goldenrod"))
 
 (define DIRT-TILES
-  (list (tile-coord 0 2) (tile-coord 1 2) (tile-coord 2 2)))
+  (list
+   (tile-coord 0 2)
+   (tile-coord 1 2)
+   (tile-coord 2 2)))
 
 (define (place-dirt-tile dt image)
   (place-image-center-tile DIRT-IMG image dt))
