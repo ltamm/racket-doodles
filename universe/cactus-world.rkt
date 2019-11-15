@@ -33,10 +33,9 @@
 
 (define (place-cactus cactus background)
   (let* ([half-tile (/ TILE-SIDE-IN-PIXELS 2)]
-         [tile-coord (cactus-tile-coord cactus)]
-         [pixel-coord (tile-coord->pixel-coord tile-coord)]
-         [x (+ half-tile (pixel-coord-x-pos pixel-coord))]
-         [y (- (+ TILE-SIDE-IN-PIXELS (pixel-coord-y-pos pixel-coord)) (/ (image-height CACTUS-IMG) 2))])
+         [cactus-coord (cactus-pixel-coord cactus)]
+         [x (+ half-tile (pixel-coord-x-pos cactus-coord))]
+         [y (- (+ TILE-SIDE-IN-PIXELS (pixel-coord-y-pos cactus-coord)) (/ (image-height CACTUS-IMG) 2))])
     (place-image CACTUS-IMG x y background)))
 
 ; Set up UI
@@ -59,8 +58,8 @@
 
 ; Set up cactus
 ; x and y pos are in tiles
-(struct cactus (tile-coord))
-(define init-cactus (cactus (tile-coord 1 1)))
+(struct cactus (pixel-coord))
+(define init-cactus (cactus (tile-coord->pixel-coord (tile-coord 1 1))))
 
 ; Set up world
 ; map is currently a list of dirt tiles
