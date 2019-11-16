@@ -3,6 +3,10 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 
+; Physics stuff
+(define INITIAL-VELOCITY -10)
+(define GRAVITY 0.75)
+
 ; Set up references to tiles
 (define CACTUS-IMG (bitmap/file (string->path "cactus.png")))
 (define DIRT-IMG (bitmap/file (string->path "dirt.png")))
@@ -35,7 +39,8 @@
   (let* ([half-tile (/ TILE-SIDE-IN-PIXELS 2)]
          [cactus-coord (cactus-pixel-coord cactus)]
          [x (+ half-tile (pixel-coord-x-pos cactus-coord))]
-         [y (- (+ TILE-SIDE-IN-PIXELS (pixel-coord-y-pos cactus-coord)) (/ (image-height CACTUS-IMG) 2))])
+         [y (+ (- (+ TILE-SIDE-IN-PIXELS (pixel-coord-y-pos cactus-coord)) (/ (image-height CACTUS-IMG) 2))
+               (cactus-velocity cactus))])
     (place-image CACTUS-IMG x y background)))
 
 ; Set up UI
@@ -61,8 +66,8 @@
 
 ; Set up cactus
 ; x and y pos are in tiles
-(struct cactus (pixel-coord))
-(define init-cactus (cactus (tile-coord->pixel-coord (tile-coord 1 1))))
+(struct cactus (pixel-coord velocity jumping?))
+(define init-cactus (cactus (tile-coord->pixel-coord (tile-coord 1 1)) 0 #f))
 
 ; Set up world
 ; map is currently a list of dirt tiles
@@ -73,11 +78,37 @@
   (let ([cactus (world-cactus world)])
     (place-cactus cactus background)))
 
+(define (handle-key w k)
+  (let ([c (world-cactus w)])
+    (if (and (key=? k " ")
+             (not (cactus-jumping? c)))
+        (world (cactus (cactus-pixel-coord c) INITIAL-VELOCITY #t))
+        w)))
 
+(define (tock w)
+  (let* ([curr-cactus (world-cactus w)]
+         [velocity (cactus-velocity curr-cactus)]
+         [cactus-coord (cactus-pixel-coord curr-cactus)]
+         [x (pixel-coord-x-pos cactus-coord)]
+         [y (pixel-coord-y-pos cactus-coord)]
+         [next-cactus-coord (pixel-coord x (+ y velocity))]
+         [next-velocity (+ velocity GRAVITY)]
+         [next-cactus (cactus next-cactus-coord next-velocity #t)])
+    
+    ; Update cactus position
+    (if (not (cactus-jumping? curr-cactus))
+        w
+        (if ( > (pixel-coord-y-pos next-cactus-coord) 128)
+            (world (cactus (pixel-coord x 128) 0 #f)) ; end of the road
+            (world next-cactus)))))
+   
 ; Run the world!
 
 (define (main w)
   (big-bang w
-    (to-draw render)))
+    (name "Cactus Hop")
+    (to-draw render)
+    (on-key handle-key)
+    (on-tick tock)))
 
 (main init-world)
